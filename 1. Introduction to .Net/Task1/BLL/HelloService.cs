@@ -4,14 +4,14 @@ namespace BLL
 {
 	public static class HelloService
 	{
-		public static string SayHello(string name)
+		public static string SayHello(DateTime date, string name)
 		{
 			if (string.IsNullOrWhiteSpace(name))
 			{
-				return $"{DateTime.Now} Hello, Anonym!";
+				return $"{date} Hello, Anonym!";
 			}
 
-			return $"{DateTime.Now} Hello, {name}!";
+			return $"{date} Hello, {name}!";
 		}
     }
 }
