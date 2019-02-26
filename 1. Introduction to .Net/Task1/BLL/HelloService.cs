@@ -2,9 +2,9 @@
 
 namespace BLL
 {
-    public class HelloService
-    {
-		public string SayHello(string name)
+	public static class HelloService
+	{
+		public static string SayHello(string name)
 		{
 			if (string.IsNullOrWhiteSpace(name))
 			{
