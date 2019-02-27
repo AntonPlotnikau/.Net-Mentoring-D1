@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  corewebui:
+    image: ${DOCKER_REGISTRY-}corewebui
+    build:
+      context: .
+      dockerfile: CoreWebUI/Dockerfile
