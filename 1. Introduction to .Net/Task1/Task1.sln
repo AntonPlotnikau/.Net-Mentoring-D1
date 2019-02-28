@@ -11,6 +11,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CoreWebUI", "CoreWebUI\Core
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{6C31F003-7619-45E2-AF8F-E5EE88FDF113}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FrameworkConsoleUI", "FrameworkConsoleUI\FrameworkConsoleUI.csproj", "{FA5B8598-DB03-4FD2-B95F-9CB44D375CCB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FrameworkWebUI", "FrameworkWebUI\FrameworkWebUI.csproj", "{4DF9A232-30E8-4791-AFC5-07E836AD169E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +37,14 @@ Global
 		{6C31F003-7619-45E2-AF8F-E5EE88FDF113}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6C31F003-7619-45E2-AF8F-E5EE88FDF113}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6C31F003-7619-45E2-AF8F-E5EE88FDF113}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FA5B8598-DB03-4FD2-B95F-9CB44D375CCB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FA5B8598-DB03-4FD2-B95F-9CB44D375CCB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FA5B8598-DB03-4FD2-B95F-9CB44D375CCB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FA5B8598-DB03-4FD2-B95F-9CB44D375CCB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4DF9A232-30E8-4791-AFC5-07E836AD169E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4DF9A232-30E8-4791-AFC5-07E836AD169E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4DF9A232-30E8-4791-AFC5-07E836AD169E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4DF9A232-30E8-4791-AFC5-07E836AD169E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
