@@ -30,3 +30,9 @@ docker build -t CoreWebUI .
 docker run -d -p 8080:80 --name CoreWebUI
 ```
 Then you can access app on 8080 port of your machine
+
+# How to publish CoreWebUi
+* create docker file for .net core app
+* select the Web Application and right click Publish
+* create new Azure container registry
+
