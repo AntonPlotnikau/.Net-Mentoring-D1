@@ -42,7 +42,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="interfaces\IDirectoryService.cs" />
+    <Compile Include="models\FileSystemEventArgs.cs" />
     <Compile Include="models\DirectoryModel.cs" />
+    <Compile Include="models\SearchStatus.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="services\DirectoryService.cs" />
     <Compile Include="services\FileSystemVisitor.cs" />
