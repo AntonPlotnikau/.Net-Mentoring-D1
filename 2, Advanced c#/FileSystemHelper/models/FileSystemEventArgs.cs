@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace FileSystemHelper.models
+namespace FileSystemHelper.Models
 {
 	public class FileSystemEventArgs : EventArgs
 	{

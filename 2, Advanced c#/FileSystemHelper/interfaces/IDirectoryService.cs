@@ -1,13 +1,14 @@
-﻿using FileSystemHelper.models;
+﻿using FileSystemHelper.Models;
+using System.Collections.Generic;
 
-namespace FileSystemHelper.interfaces
+namespace FileSystemHelper.Interfaces
 {
 	public interface IDirectoryService
 	{
 		bool DirectoryExists(string path);
 
-		string[] GetDirectories(string path);
+		IEnumerable<string> GetDirectories(string path);
 
-		string[] GetFiles(string path);
+		IEnumerable<string> GetFiles(string path);
 	}
 }

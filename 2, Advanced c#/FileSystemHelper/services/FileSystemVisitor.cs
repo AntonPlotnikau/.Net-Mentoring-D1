@@ -1,9 +1,10 @@
-﻿using FileSystemHelper.interfaces;
-using FileSystemHelper.models;
+﻿using FileSystemHelper.Interfaces;
+using FileSystemHelper.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
-namespace FileSystemHelper.services
+namespace FileSystemHelper.Services
 {
 	public class FileSystemVisitor
 	{
@@ -28,7 +29,7 @@ namespace FileSystemHelper.services
 			this.searchPattern = searchPattern;
 		}
 
-		public DirectoryModel GetDirectoryTree(string path)
+		public void GetDirectoryTree(string path)
 		{
 			if (path == null)
 			{
@@ -41,25 +42,12 @@ namespace FileSystemHelper.services
 			}
 
 			Start?.Invoke(this, new EventArgs());
-			var directory = GetDirectory(path);
+			GetFiles(path);
+			GetChildrenDirectories(path);
 			Finish?.Invoke(this, new EventArgs());
-
-			return GetDirectory(path);
 		}
 
-		private DirectoryModel GetDirectory(string path)
-		{
-			DirectoryModel directory = new DirectoryModel
-			{
-				DirectoryPath = path,
-				ChildrenDirectories = GetChildrenDirectories(path),
-				Files = GetFiles(path)
-			};
-
-			return directory;
-		}
-
-		private IEnumerable<DirectoryModel> GetChildrenDirectories(string path)
+		private void GetChildrenDirectories(string path)
 		{
 			var directories = directoryService.GetDirectories(path);
 
@@ -92,11 +80,12 @@ namespace FileSystemHelper.services
 					}
 				}
 
-				yield return GetDirectory(directory);
+				GetFiles(directory);
+				GetChildrenDirectories(directory);
 			}
 		}
 
-		private IEnumerable<string> GetFiles(string path)
+		private void GetFiles(string path)
 		{
 			var files = directoryService.GetFiles(path);
 
@@ -128,8 +117,6 @@ namespace FileSystemHelper.services
 						continue;
 					}
 				}
-
-				yield return file ;
 			}
 		}
 	}
