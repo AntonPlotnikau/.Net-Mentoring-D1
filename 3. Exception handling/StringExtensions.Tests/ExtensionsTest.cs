@@ -26,6 +26,7 @@ namespace StringExtensions.Tests
 		[TestCase("abcderrtr", ExpectedResult = 'a')]
 		[TestCase("1fdsf2df4fg", ExpectedResult = '1')]
 		[TestCase("      Test   ", ExpectedResult = 'T')]
+		[TestCase("				Test   ", ExpectedResult = 'T')]
 		[TestCase("_anton", ExpectedResult = '_')]
 		public char GetFirstNonWhiteSpaceChar_ValidSourceString_ReturnsFirstNonWhiteSpaceChar(string source)
 			=> source.GetFirstNonWhiteSpaceChar();

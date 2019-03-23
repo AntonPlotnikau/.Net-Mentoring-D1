@@ -15,7 +15,7 @@ namespace StringExtensions
 				throw new ArgumentException($"this string is null, empty or white space");
 			}
 
-			return source.Trim(' ').First();
+			return source.Trim(' ', '\t').First();
 		}
 	}
 }
