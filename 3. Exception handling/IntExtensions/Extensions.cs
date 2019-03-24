@@ -22,40 +22,43 @@ namespace IntExtensions
 
 			if (source.First() == '-')
 			{
-				return -1*TransformStringToInt(source.Skip(1).Reverse());
+				return TransformStringToInt(source.Skip(1), -1);
 			}
 
-			return TransformStringToInt(source.Reverse());
+			return TransformStringToInt(source, 1);
 		}
 
-		private static int TransformStringToInt(IEnumerable<char> source)
+		private static int TransformStringToInt(IEnumerable<char> source, int sign)
 		{
 			int result = 0;
-			int coefficient = 0;
 
 			foreach (var value in source)
 			{
-				result = result.AddDigitToResult(value, coefficient);
-
-				coefficient++;
+				var digit = TransformCharToDigit(value);
+				result = AddDigitToResult(result, digit, sign);
 			}
 
 			return result;
 		}
 
-		private static int AddDigitToResult(this int result, char value, int coefficient)
+		private static int AddDigitToResult(int result, int digit, int sign)
 		{
-			if (!Char.IsDigit(value))
+			checked
+			{
+				result = result*10 + sign*digit;
+			}
+
+			return result;
+		}
+
+		private static int TransformCharToDigit(char value)
+		{
+			if (!(value >= '0' && value <= '9'))
 			{
 				throw new StringParseFormatException($"Source string contains non digit chars");
 			}
 
-			checked
-			{
-				result = result + (int)(Char.GetNumericValue(value) * Math.Pow(10, coefficient));
-			}
-
-			return result;
+			return value - '0';
 		}
     }
 }

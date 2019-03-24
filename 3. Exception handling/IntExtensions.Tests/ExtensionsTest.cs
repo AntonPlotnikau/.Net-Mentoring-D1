@@ -31,10 +31,10 @@ namespace IntExtensions.Tests
 			=> Assert.Throws<StringParseFormatException>(() => Extensions.ParseString("54.354"));
 
 		[Test]
-		[TestCase("2147483647", ExpectedResult = 2147483647)]
-		[TestCase("-2147483647", ExpectedResult = -2147483647)]
-		[TestCase("0", ExpectedResult = 0)]
-		public int ParseString_IntStringValue_IntResult(string source)
-			=> Extensions.ParseString(source);
+		[TestCase(int.MaxValue, ExpectedResult = int.MaxValue)]
+		[TestCase(int.MinValue, ExpectedResult = int.MinValue)]
+		[TestCase(0, ExpectedResult = 0)]
+		public int ParseString_IntStringValue_IntResult(int source)
+			=> Extensions.ParseString(source.ToString());
 	}
 }
