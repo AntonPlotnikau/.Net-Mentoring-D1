@@ -257,36 +257,54 @@ namespace SampleQueries
 		[Description("Make the average annual activity statistics of clients by month (excluding the year), statistics by year, by year and by month")]
 		public void Linq0010()
 		{
-			var statistics = dataSource.Customers
+			var activityByMonth = dataSource.Customers
+				.SelectMany(c => c.Orders)
+				.GroupBy(c => c.OrderDate.Month)
 				.Select(c => new
 				{
-					c.CustomerID,
-					ActivityByMonth = c.Orders.GroupBy(o => o.OrderDate.Month).Select(p => new { Month = p.Key, OrdersCount = p.Count() }),
-					ActivityByYear = c.Orders.GroupBy(o => o.OrderDate.Year).Select(p => new { Year = p.Key, OrdersCount = p.Count() }),
-					ActivityByMonthAndYear = c.Orders.GroupBy(o => new { o.OrderDate.Year, o.OrderDate.Month }).Select(p => new { p.Key.Year, p.Key.Month, OrdersCount = p.Count() }),
-				}
-				);
+					Month = c.Key,
+					OrdersCount = c.Count()
+				})
+				.OrderBy(c => c.Month);
 
-			foreach (var item in statistics)
+			var activityByYear = dataSource.Customers
+				.SelectMany(c => c.Orders)
+				.GroupBy(c => c.OrderDate.Year)
+				.Select(c => new
+				{
+					Year = c.Key,
+					OrdersCount = c.Count()
+				})
+				.OrderBy(c => c.Year);
+
+			var activityByMonthAndYear = dataSource.Customers
+				.SelectMany(c => c.Orders)
+				.GroupBy(c => new { c.OrderDate.Year, c.OrderDate.Month })
+				.Select(c => new
+				{
+					c.Key.Year,
+					c.Key.Month,
+					OrdersCount = c.Count()
+				})
+				.OrderBy(c => c.Year)
+				.ThenBy(c => c.Month);
+
+			ObjectDumper.Write("-----------ActivityByMonth------------");
+			foreach (var monthActivity in activityByMonth)
 			{
-				ObjectDumper.Write($"Id: {item.CustomerID} ");
-				ObjectDumper.Write("-----------ActivityByMonth------------");
-				foreach (var monthActivity in item.ActivityByMonth)
-				{
-					ObjectDumper.Write($"Month: {monthActivity.Month} OrdersCount: {monthActivity.OrdersCount}");
-				}
+				ObjectDumper.Write($"Month: {monthActivity.Month} OrdersCount: {monthActivity.OrdersCount}");
+			}
 
-				ObjectDumper.Write("-----------ActivityByYear------------");
-				foreach (var yearActivity in item.ActivityByYear)
-				{
-					ObjectDumper.Write($"Year: {yearActivity.Year} OrdersCount: {yearActivity.OrdersCount}");
-				}
+			ObjectDumper.Write("-----------ActivityByYear------------");
+			foreach (var yearActivity in activityByYear)
+			{
+				ObjectDumper.Write($"Year: {yearActivity.Year} OrdersCount: {yearActivity.OrdersCount}");
+			}
 
-				ObjectDumper.Write("-----------ActivityByMonthAndYear------------");
-				foreach (var yearAndMonthActivity in item.ActivityByMonthAndYear)
-				{
-					ObjectDumper.Write($"Year: {yearAndMonthActivity.Year} Month: {yearAndMonthActivity.Month} OrdersCount: {yearAndMonthActivity.OrdersCount}");
-				}
+			ObjectDumper.Write("-----------ActivityByMonthAndYear------------");
+			foreach (var yearAndMonthActivity in activityByMonthAndYear)
+			{
+				ObjectDumper.Write($"Year: {yearAndMonthActivity.Year} Month: {yearAndMonthActivity.Month} OrdersCount: {yearAndMonthActivity.OrdersCount}");
 			}
 		}
 	}
