@@ -150,7 +150,8 @@ namespace SampleQueries
 				)
 				.OrderBy(c => c.FirstOrderDate.Year)
 				.ThenBy(c => c.FirstOrderDate.Month)
-				.ThenByDescending(c => c.Turnover);
+				.ThenByDescending(c => c.Turnover)
+				.ThenBy(c => c.CustomerID);
 
 			foreach (var customer in customers)
 			{
@@ -166,8 +167,8 @@ namespace SampleQueries
 			var customers = dataSource.Customers
 				.Where(
 					c => (c.PostalCode != null && c.PostalCode.Any(p => p < '0' || p > '9'))
-					|| c.Region == null
-					|| c.Phone.First() != '('
+					|| string.IsNullOrWhiteSpace(c.Region)
+					|| c.Phone.FirstOrDefault() != '('
 				);
 
 			foreach (var customer in customers)
@@ -181,11 +182,30 @@ namespace SampleQueries
 		[Description("Group all products by category, inside - by stock, within the last group sort by cost")]
 		public void Linq007()
 		{
-			var products = dataSource.Products.OrderBy(p => p.Category).ThenBy(p => p.UnitsInStock).ThenBy(p => p.UnitPrice);
+			var groups = dataSource.Products
+				.GroupBy(products => products.Category)
+				.Select(group => new
+				{
+					CategoryName = group.Key,
+					ProductsByStock = group.GroupBy(productsInGroup => productsInGroup.UnitsInStock > 0)
+						.Select(productGroup => new
+						{
+							IsInStock = productGroup.Key,
+							Products = productGroup.OrderBy(prod => prod.UnitPrice)
+						})
+				});
 
-			foreach (var product in products)
+			foreach (var productsByCategory in groups)
 			{
-				ObjectDumper.Write($"Name: {product.ProductName} Category: {product.Category} UnitsInStock: {product.UnitsInStock} UnitPrice: {product.UnitPrice}");
+				ObjectDumper.Write($"Category: {productsByCategory.CategoryName}");
+				foreach (var productsByStock in productsByCategory.ProductsByStock)
+				{
+					ObjectDumper.Write($"Is in stock: {productsByStock.IsInStock}");
+					foreach (var product in productsByStock.Products)
+					{
+						ObjectDumper.Write($"Product: {product.ProductName} Price: {product.UnitPrice}");
+					}
+				}
 			}
 		}
 
@@ -194,20 +214,19 @@ namespace SampleQueries
 		[Description("Group the goods into groups cheap, average price, expensive")]
 		public void Linq008()
 		{
-			var products = dataSource.Products
-				.Select(p => new
-				{
-					p.ProductName,
-					p.UnitPrice,
-					Category = (p.UnitPrice < 15 ? "cheap" :
-									p.UnitPrice > 30 ? "expensive" :
-									"average price")
-				}
+			var productGroups = dataSource.Products
+				.GroupBy(p => p.UnitPrice < 15 ? "cheap" :
+							p.UnitPrice > 30 ?	"expensive" :
+												"average price"
 				);
 
-			foreach (var product in products)
+			foreach (var productGroup in productGroups)
 			{
-				ObjectDumper.Write($"Name: {product.ProductName} Category: {product.Category} UnitPrice: {product.UnitPrice}");
+				ObjectDumper.Write(productGroup.Key);
+				foreach (var product in productGroup) 
+				{
+					ObjectDumper.Write($"Name: {product.ProductName} UnitPrice: {product.UnitPrice}");
+				}
 			}
 		}
 
