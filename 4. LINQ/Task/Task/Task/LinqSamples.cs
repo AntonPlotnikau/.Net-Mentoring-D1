@@ -120,11 +120,12 @@ namespace SampleQueries
 		public void Linq004()
 		{
 			var customers = dataSource.Customers
+				.Where(c => c.Orders != null && c.Orders.Length > 0)
 				.Select(c => new
 				{
 					c.CustomerID,
 					c.CompanyName,
-					FirstOrderDate = c.Orders.OrderBy(o => o.OrderDate).Select(o => o.OrderDate).FirstOrDefault()
+					FirstOrderDate = c.Orders.OrderBy(o => o.OrderDate).Select(o => o.OrderDate).First()
 				}
 				);
 
@@ -140,12 +141,13 @@ namespace SampleQueries
 		public void Linq005()
 		{
 			var customers = dataSource.Customers
+				.Where(c => c.Orders != null && c.Orders.Length > 0)
 				.Select(c => new
 				{
 					c.CustomerID,
 					c.CompanyName,
 					Turnover = c.Orders.Sum(o => o.Total),
-					FirstOrderDate = c.Orders.OrderBy(o => o.OrderDate).Select(o => o.OrderDate).FirstOrDefault()
+					FirstOrderDate = c.Orders.OrderBy(o => o.OrderDate).Select(o => o.OrderDate).First()
 				}
 				)
 				.OrderBy(c => c.FirstOrderDate.Year)
