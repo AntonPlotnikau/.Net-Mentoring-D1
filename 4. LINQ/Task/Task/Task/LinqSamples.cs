@@ -258,33 +258,70 @@ namespace SampleQueries
 		public void Linq0010()
 		{
 			var activityByMonth = dataSource.Customers
-				.SelectMany(c => c.Orders)
-				.GroupBy(c => c.OrderDate.Month)
+				.SelectMany(c => c.Orders
+					.Select(o => new
+					{
+						Customer = c,
+						Order = o
+					})
+				)
+				.GroupBy(c => new { c.Order.OrderDate.Month, c.Customer.CustomerID })
+				.Select(c => new
+				{
+					c.Key.Month,
+					OrdersCount = c.Count()
+				})
+				.GroupBy(c => c.Month)
 				.Select(c => new
 				{
 					Month = c.Key,
-					OrdersCount = c.Count()
+					AverageOrdersCount = c.Average(o => o.OrdersCount)
 				})
 				.OrderBy(c => c.Month);
 
 			var activityByYear = dataSource.Customers
-				.SelectMany(c => c.Orders)
-				.GroupBy(c => c.OrderDate.Year)
+				.SelectMany(c => c.Orders
+					.Select(o => new
+					{
+						Customer = c,
+						Order = o
+					})
+				)
+				.GroupBy(c => new { c.Order.OrderDate.Year, c.Customer.CustomerID })
+				.Select(c => new
+				{
+					c.Key.Year,
+					OrdersCount = c.Count()
+				})
+				.GroupBy(c => c.Year)
 				.Select(c => new
 				{
 					Year = c.Key,
-					OrdersCount = c.Count()
+					AverageOrdersCount = c.Average(o => o.OrdersCount)
 				})
 				.OrderBy(c => c.Year);
 
 			var activityByMonthAndYear = dataSource.Customers
-				.SelectMany(c => c.Orders)
-				.GroupBy(c => new { c.OrderDate.Year, c.OrderDate.Month })
+				.SelectMany(c => c.Orders
+					.Select(o => new
+					{
+						Customer = c,
+						Order = o
+					})
+				)
+				.GroupBy(c => new { c.Order.OrderDate.Year, c.Order.OrderDate.Month, c.Customer.CustomerID })
 				.Select(c => new
 				{
 					c.Key.Year,
 					c.Key.Month,
 					OrdersCount = c.Count()
+				})
+				.GroupBy(c => new { c.Year, c.Month })
+				.Select(c => new
+				{
+					c.Key.Year,
+					c.Key.Month,
+					AverageOrdersCount = c.Average(o => o.OrdersCount)
 				})
 				.OrderBy(c => c.Year)
 				.ThenBy(c => c.Month);
@@ -292,19 +329,19 @@ namespace SampleQueries
 			ObjectDumper.Write("-----------ActivityByMonth------------");
 			foreach (var monthActivity in activityByMonth)
 			{
-				ObjectDumper.Write($"Month: {monthActivity.Month} OrdersCount: {monthActivity.OrdersCount}");
+				ObjectDumper.Write($"Month: {monthActivity.Month} AverageOrdersCount: {monthActivity.AverageOrdersCount}");
 			}
 
 			ObjectDumper.Write("-----------ActivityByYear------------");
 			foreach (var yearActivity in activityByYear)
 			{
-				ObjectDumper.Write($"Year: {yearActivity.Year} OrdersCount: {yearActivity.OrdersCount}");
+				ObjectDumper.Write($"Year: {yearActivity.Year} AverageOrdersCount: {yearActivity.AverageOrdersCount}");
 			}
 
 			ObjectDumper.Write("-----------ActivityByMonthAndYear------------");
 			foreach (var yearAndMonthActivity in activityByMonthAndYear)
 			{
-				ObjectDumper.Write($"Year: {yearAndMonthActivity.Year} Month: {yearAndMonthActivity.Month} OrdersCount: {yearAndMonthActivity.OrdersCount}");
+				ObjectDumper.Write($"Year: {yearAndMonthActivity.Year} Month: {yearAndMonthActivity.Month} AverageOrdersCount: {yearAndMonthActivity.AverageOrdersCount}");
 			}
 		}
 	}
