@@ -50,6 +50,11 @@
     <Compile Include="Interfaces\IDirectoryWatcher.cs" />
     <Compile Include="Interfaces\IFileDistributor.cs" />
     <Compile Include="Interfaces\ILogger.cs" />
+    <Compile Include="LocalizationResources\Resource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resource.resx</DependentUpon>
+    </Compile>
     <Compile Include="Models\Destination.cs" />
     <Compile Include="Models\FileCreatedEventArgs.cs" />
     <Compile Include="Models\FileModel.cs" />
@@ -60,7 +65,12 @@
     <Compile Include="Services\Logger.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="LocalizationResources\" />
+    <EmbeddedResource Include="LocalizationResources\Resource.en-US.resx" />
+    <EmbeddedResource Include="LocalizationResources\Resource.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="LocalizationResources\Resource.ru-Ru.resx" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

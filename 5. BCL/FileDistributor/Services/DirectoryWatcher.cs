@@ -1,4 +1,5 @@
 ﻿using FileDistributor.Interfaces;
+using FileDistributor.LocalizationResources;
 using FileDistributor.Models;
 using System;
 using System.Collections.Generic;
@@ -38,7 +39,7 @@ namespace FileDistributor.Services
 
 				watcher.Created += (sender, eventArgs) =>
 				{
-					logger.Log($"File was created. File path: {eventArgs.FullPath}");
+					logger.Log(string.Format(Resource.FileCreated, eventArgs.FullPath));
 					OnFileCreated(new FileModel { Name = eventArgs.Name, FullPath = eventArgs.FullPath });
 				};
 

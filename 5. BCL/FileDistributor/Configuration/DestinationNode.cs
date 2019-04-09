@@ -12,5 +12,8 @@ namespace FileDistributor.Configuration
 
 		[ConfigurationProperty("addDate", IsRequired = false, DefaultValue = false)]
 		public bool AddDate => (bool)this["addDate"];
+
+		[ConfigurationProperty("addNumber", IsRequired = false, DefaultValue = false)]
+		public bool AddNumber => (bool)this["addNumber"];
 	}
 }

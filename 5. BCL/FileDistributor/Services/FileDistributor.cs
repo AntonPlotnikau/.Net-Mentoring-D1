@@ -1,4 +1,5 @@
 ﻿using FileDistributor.Interfaces;
+using FileDistributor.LocalizationResources;
 using FileDistributor.Models;
 using System;
 using System.Collections.Generic;
@@ -31,14 +32,15 @@ namespace FileDistributor.Services
 			{
 				if(Regex.IsMatch(file.Name, destination.SearchPattern))
 				{
-					logger.Log("Rule match");
-					to = this.RenderDestinationPath(file, destination);
+					logger.Log(string.Format(Resource.RuleFound, destination.SearchPattern));
+					to = this.CreateDestinationPath(file, destination);
 					this.MoveFile(from, to);
-					logger.Log("File was moved");
+					logger.Log(string.Format(Resource.FileMoved, from, to));
 					return;
 				}
 			}
 
+			logger.Log(Resource.FileMovedDefault);
 			this.MoveFile(from, to);
 		}
 
@@ -58,15 +60,15 @@ namespace FileDistributor.Services
 			}
 			catch (FileNotFoundException)
 			{
-				logger.Log("File is not found", LoggingLevel.WARN);
+				logger.Log(Resource.FileNotFound, LoggingLevel.Warn);
 			}
-			catch (IOException)
+			catch (IOException ex)
 			{
-				logger.Log("IOException", LoggingLevel.FATALE);
+				logger.Log(ex.Message, LoggingLevel.Fatale);
 			}
 		}
 
-		private string RenderDestinationPath(FileModel file, Destination destination)
+		private string CreateDestinationPath(FileModel file, Destination destination)
 		{
 			var destinationPath = new StringBuilder();
 			var fileName = Path.GetFileNameWithoutExtension(file.Name);
@@ -78,7 +80,16 @@ namespace FileDistributor.Services
 			{
 				var dateFormat = CultureInfo.CurrentCulture.DateTimeFormat;
 
+				dateFormat.DateSeparator = ".";
+
 				destinationPath.Append($"_{DateTime.Now.ToLocalTime().ToString(dateFormat.ShortDatePattern)}");
+			}
+
+			if (destination.AddNumber)
+			{
+				var count = Directory.GetFiles(destination.DestinationFolder, $"{fileName}_*{extension}").Length;
+
+				destinationPath.Append($"_{count}");
 			}
 
 			destinationPath.Append(extension);

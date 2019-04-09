@@ -2,10 +2,10 @@
 {
 	public enum LoggingLevel
 	{
-		DEBUG,
-		INFO,
-		WARN,
-		ERROR,
-		FATALE
+		Debug,
+		Info,
+		Warn,
+		Error,
+		Fatale
 	}
 }

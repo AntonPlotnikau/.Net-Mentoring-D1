@@ -13,5 +13,7 @@ namespace FileDistributor.Models
 		public string DestinationFolder { get; set; }
 
 		public bool AddDate { get; set; }
+
+		public bool AddNumber { get; set; }
 	}
 }

@@ -8,7 +8,7 @@ namespace FileDistributor.Services
 	{
 		public void Log(string message)
 		{
-			this.Log(message, LoggingLevel.INFO);
+			this.Log(message, LoggingLevel.Info);
 		}
 
 		public void Log(string message, LoggingLevel level)
