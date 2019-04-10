@@ -51,11 +51,8 @@ namespace ConsoleApp
 
 			watcher.FileCreated += (o, e) => { distributor.MoveFile(e.File); };
 
-			CancellationTokenSource source = new CancellationTokenSource();
-
 			Console.CancelKeyPress += (o, e) =>
 			{
-				source.Cancel();
 				waitHandle.Set();
 			};
 
