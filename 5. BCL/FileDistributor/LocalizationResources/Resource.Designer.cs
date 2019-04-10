@@ -61,7 +61,7 @@ namespace FileDistributor.LocalizationResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to File was created. File path: {0}.
         /// </summary>
         internal static string FileCreated {
             get {
@@ -70,7 +70,7 @@ namespace FileDistributor.LocalizationResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to File was moved from {0} to {1}.
         /// </summary>
         internal static string FileMoved {
             get {
@@ -79,7 +79,7 @@ namespace FileDistributor.LocalizationResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to Template is not found. File was moved to default folder.
         /// </summary>
         internal static string FileMovedDefault {
             get {
@@ -88,7 +88,7 @@ namespace FileDistributor.LocalizationResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to File is not found.
         /// </summary>
         internal static string FileNotFound {
             get {
@@ -97,7 +97,7 @@ namespace FileDistributor.LocalizationResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to Template was found. SearchPattern {0}.
         /// </summary>
         internal static string RuleFound {
             get {

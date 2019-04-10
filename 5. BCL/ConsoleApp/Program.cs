@@ -12,6 +12,8 @@ namespace ConsoleApp
 {
 	class Program
 	{
+		private static ManualResetEvent waitHandle = new ManualResetEvent(false);
+
 		static void Main(string[] args)
 		{
 			FileDistributorConfigurationSection section = ConfigurationManager.GetSection("fileDistributorSection") as FileDistributorConfigurationSection;
@@ -54,12 +56,10 @@ namespace ConsoleApp
 			Console.CancelKeyPress += (o, e) =>
 			{
 				source.Cancel();
+				waitHandle.Set();
 			};
 
-			while (!source.IsCancellationRequested)
-			{
-
-			}
+			waitHandle.WaitOne();
 		}
 	}
 }

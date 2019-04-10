@@ -65,7 +65,6 @@
     <Compile Include="Services\Logger.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="LocalizationResources\Resource.en-US.resx" />
     <EmbeddedResource Include="LocalizationResources\Resource.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resource.Designer.cs</LastGenOutput>

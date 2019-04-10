@@ -118,18 +118,18 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="FileCreated" xml:space="preserve">
-    <value />
+    <value>File was created. File path: {0}</value>
   </data>
   <data name="FileMoved" xml:space="preserve">
-    <value />
+    <value>File was moved from {0} to {1}</value>
   </data>
   <data name="FileMovedDefault" xml:space="preserve">
-    <value />
+    <value>Template is not found. File was moved to default folder</value>
   </data>
   <data name="FileNotFound" xml:space="preserve">
-    <value />
+    <value>File is not found</value>
   </data>
   <data name="RuleFound" xml:space="preserve">
-    <value />
+    <value>Template was found. SearchPattern {0}</value>
   </data>
 </root>

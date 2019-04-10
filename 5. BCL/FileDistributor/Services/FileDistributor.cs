@@ -44,6 +44,8 @@ namespace FileDistributor.Services
 			this.MoveFile(from, to);
 		}
 
+
+		//TODO: it is needed to implement functionality of parallel watching and file moving
 		private void MoveFile(string from, string to)
 		{
 			string dir = Path.GetDirectoryName(to);
@@ -55,7 +57,6 @@ namespace FileDistributor.Services
 				{
 					File.Delete(to);
 				}
-
 				File.Move(from, to);
 			}
 			catch (FileNotFoundException)
@@ -85,7 +86,7 @@ namespace FileDistributor.Services
 				destinationPath.Append($"_{DateTime.Now.ToLocalTime().ToString(dateFormat.ShortDatePattern)}");
 			}
 
-			if (destination.AddNumber)
+			if (destination.AddNumber && Directory.Exists(destination.DestinationFolder))
 			{
 				var count = Directory.GetFiles(destination.DestinationFolder, $"{fileName}_*{extension}").Length;
 
