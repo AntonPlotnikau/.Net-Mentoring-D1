@@ -52,6 +52,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestData\CustomerBLL.cs" />
     <Compile Include="TestData\CustomerDAL.cs" />
+    <Compile Include="TestData\CustomerPL.cs" />
     <Compile Include="TestData\ICustomerDAL.cs" />
     <Compile Include="TestData\Logger.cs" />
   </ItemGroup>
@@ -63,6 +64,9 @@
       <Project>{2276f7f5-4999-4dda-bfb2-acabb9ca8e96}</Project>
       <Name>DIContainer</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

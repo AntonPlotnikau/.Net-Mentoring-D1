@@ -43,5 +43,27 @@ namespace DIContainer.Tests
 			Assert.NotNull(customerBll);
 			Assert.True(customerBll.GetType() == typeof(CustomerBLL));
 		}
+
+		[Test]
+		public void CreateInstance_InstanceOfInterfaceReference_CorrectResultType()
+		{
+			container.AddType(typeof(CustomerDAL), typeof(ICustomerDAL));
+
+			ICustomerDAL customerDal = container.CreateInstance<ICustomerDAL>();
+
+			Assert.NotNull(customerDal);
+			Assert.True(customerDal.GetType() == typeof(CustomerDAL));
+		}
+
+		[Test]
+		public void CreateInstance_InjectableConstructorParameterWithHisOwnInjections_CorrectResultType()
+		{
+			container.AddAssembly(Assembly.GetExecutingAssembly());
+
+			var customerPl = container.CreateInstance(typeof(CustomerPL));
+
+			Assert.NotNull(customerPl);
+			Assert.True(customerPl.GetType() == typeof(CustomerPL));
+		}
 	}
 }
