@@ -10,5 +10,7 @@ namespace NorthwindListener.Interface.Interfaces
 	{
 		void StartListen(string prefix);
 		void StopListen();
+
+		void ProcessRequest();
 	}
 }

@@ -1,5 +1,7 @@
-﻿using NorthwindListener.Interface.Interfaces;
+﻿using NorthwindListener.DAL.Interface.Models;
+using NorthwindListener.Interface.Interfaces;
 using NorthwindListener.Interface.RequestModels;
+using NorthwindListener.Interface.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,7 +37,7 @@ namespace NorthwindListener.BLL.Services
 
 			listener.Prefixes.Add(prefix);
 			listener.Start();
-			this.StartRequestProcessing();
+			this.ProcessRequest();
 		}
 
 		public void StopListen()
@@ -49,27 +51,84 @@ namespace NorthwindListener.BLL.Services
 			isStarted = false;
 		}
 
-		private void StartRequestProcessing()
+		public void ProcessRequest()
 		{
-			while (true)
+			var context = listener.GetContext();
+			var request = context.Request;
+			var response = context.Response;
+
+			var requestModel = new GetOrdersRequest();
+
+			if (request.HttpMethod == "POST" && request.InputStream != null)
 			{
-				var context = listener.GetContext();
-				var request = context.Request;
-				var response = context.Response;
+				requestModel = parser.ParseRequestBody(request.InputStream);
+			}
+			else
+			{
+				var dataFromQuery = request.Url.ParseQueryString();
+				requestModel = parser.ParseRequestQueryString(dataFromQuery);
+			}
 
-				var requestModel = new GetOrdersRequest();
+			var views = GetOrderViews(requestModel);
 
-				if (request.HttpMethod == "POST" && request.InputStream != null)
+			SendResponce(response, views, request.AcceptTypes);
+		}
+
+		private IEnumerable<OrderViewModel> GetOrderViews(GetOrdersRequest requestModel)
+		{
+			var orders = repository.GetOrders(o => 
+			{
+				bool result = o.CustomerID == requestModel.CustomerID;
+				if (requestModel.From.HasValue)
 				{
-					requestModel = parser.ParseRequestBody(request.InputStream);
+					result = result && o.OrderDate > requestModel.From;
 				}
-				else
+				else if(requestModel.To.HasValue)
 				{
-					var dataFromQuery = request.Url.ParseQueryString();
-					requestModel = parser.ParseRequestQueryString(dataFromQuery);
+					result = result && o.OrderDate < requestModel.To;
 				}
 
+				return result;
+			});
 
+			if (requestModel.Skip.HasValue && requestModel.Take.HasValue)
+			{
+				return orders
+					.Skip(requestModel.Skip.Value)
+					.Take(requestModel.Take.Value)
+					.Select(o => new OrderViewModel(o))
+					.OrderBy(o => o.OrderID);
+			}
+
+			if (requestModel.Skip.HasValue)
+			{
+				return orders
+					.Skip(requestModel.Skip.Value)
+					.Select(o => new OrderViewModel(o))
+					.OrderBy(o => o.OrderID);
+			}
+
+			if (requestModel.Take.HasValue)
+			{
+				return orders
+					.Take(requestModel.Skip.Value)
+					.Select(o => new OrderViewModel(o))
+					.OrderBy(o => o.OrderID);
+			}
+
+			return orders.Select(o => new OrderViewModel(o)).OrderBy(o => o.OrderID);
+		}
+
+		private void SendResponce(HttpListenerResponse response, IEnumerable<OrderViewModel> views, string[] accepts)
+		{
+			if(accepts.Any(a => a == @"text/xml"))
+			{
+				response.AppendHeader("Content-Type", "text/xml");
+			}
+
+			if (accepts.Any(a => a == @"text/xml"))
+			{
+				response.AppendHeader("Content-Type", "text/xml");
 			}
 		}
 	}
