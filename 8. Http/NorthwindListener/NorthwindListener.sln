@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NorthwindListener.Interface
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NorthwindListener.BLL", "NorthwindListener.BLL\NorthwindListener.BLL.csproj", "{A19056AF-79C3-472A-A835-397757343B91}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NorthwindConsole", "NorthwindConsole\NorthwindConsole.csproj", "{6CC56AAF-A16B-48F4-8B4D-2F38E32C02D5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{A19056AF-79C3-472A-A835-397757343B91}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A19056AF-79C3-472A-A835-397757343B91}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A19056AF-79C3-472A-A835-397757343B91}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6CC56AAF-A16B-48F4-8B4D-2F38E32C02D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6CC56AAF-A16B-48F4-8B4D-2F38E32C02D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6CC56AAF-A16B-48F4-8B4D-2F38E32C02D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6CC56AAF-A16B-48F4-8B4D-2F38E32C02D5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -19,6 +19,11 @@ namespace NorthwindListener.Interface.ViewModels
 			this.ShipRegion = order.ShipRegion;
 		}
 
+		public OrderViewModel()
+		{
+
+		}
+
 		[XmlAttribute(AttributeName = "id")]
 		public int OrderID { get; set; }
 

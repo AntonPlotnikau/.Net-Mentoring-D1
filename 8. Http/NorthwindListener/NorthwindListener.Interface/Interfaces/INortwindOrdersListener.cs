@@ -8,7 +8,10 @@ namespace NorthwindListener.Interface.Interfaces
 {
 	public interface INortwindOrdersListener
 	{
+		bool IsStarted { get; }
+
 		void StartListen(string prefix);
+
 		void StopListen();
 
 		void ProcessRequest();

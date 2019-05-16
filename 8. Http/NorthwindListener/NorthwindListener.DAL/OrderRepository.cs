@@ -12,7 +12,7 @@ namespace NorthwindListener.DAL
 		{
 			using (var context = new NorthwindDbContext())
 			{
-				return context.Orders.Where(predicate);
+				return context.Orders.Where(predicate).ToList();
 			}
 		}
 	}

@@ -4,6 +4,7 @@ using NorthwindListener.Interface.RequestModels;
 using NorthwindListener.Interface.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -18,7 +19,8 @@ namespace NorthwindListener.BLL.Services
 		private readonly IRequestParser<GetOrdersRequest> parser;
 		private readonly IOrderRepository repository;
 		private readonly IXmlConverter converter;
-		private bool isStarted = false;
+
+		public bool IsStarted { get; private set; } = false;
 
 		public NorthwindOrdersListener(IRequestParser<GetOrdersRequest> parser, IOrderRepository repository, IXmlConverter converter)
 		{
@@ -30,25 +32,25 @@ namespace NorthwindListener.BLL.Services
 
 		public void StartListen(string prefix)
 		{
-			if (isStarted)
+			if (IsStarted)
 			{
 				this.StopListen();
 			}
 
 			listener.Prefixes.Add(prefix);
 			listener.Start();
-			this.ProcessRequest();
+			IsStarted = true;
 		}
 
 		public void StopListen()
 		{
-			if (!isStarted)
+			if (!IsStarted)
 			{
 				return;
 			}
 
 			listener.Stop();
-			isStarted = false;
+			IsStarted = false;
 		}
 
 		public void ProcessRequest()
@@ -59,9 +61,9 @@ namespace NorthwindListener.BLL.Services
 
 			var requestModel = new GetOrdersRequest();
 
-			if (request.HttpMethod == "POST" && request.InputStream != null)
+			if (request.HttpMethod == "POST")
 			{
-				requestModel = parser.ParseRequestBody(request.InputStream);
+				requestModel = parser.ParseRequestQueryString(request.Url.ParseQueryString());
 			}
 			else
 			{
@@ -97,7 +99,8 @@ namespace NorthwindListener.BLL.Services
 					.Skip(requestModel.Skip.Value)
 					.Take(requestModel.Take.Value)
 					.Select(o => new OrderViewModel(o))
-					.OrderBy(o => o.OrderID);
+					.OrderBy(o => o.OrderID)
+					.ToList();
 			}
 
 			if (requestModel.Skip.HasValue)
@@ -105,30 +108,48 @@ namespace NorthwindListener.BLL.Services
 				return orders
 					.Skip(requestModel.Skip.Value)
 					.Select(o => new OrderViewModel(o))
-					.OrderBy(o => o.OrderID);
+					.OrderBy(o => o.OrderID)
+					.ToList();
 			}
 
 			if (requestModel.Take.HasValue)
 			{
 				return orders
-					.Take(requestModel.Skip.Value)
+					.Take(requestModel.Take.Value)
 					.Select(o => new OrderViewModel(o))
-					.OrderBy(o => o.OrderID);
+					.OrderBy(o => o.OrderID)
+					.ToList();
 			}
 
-			return orders.Select(o => new OrderViewModel(o)).OrderBy(o => o.OrderID);
+			return orders.Select(o => new OrderViewModel(o)).OrderBy(o => o.OrderID).ToList();
 		}
 
 		private void SendResponce(HttpListenerResponse response, IEnumerable<OrderViewModel> views, string[] accepts)
 		{
-			if(accepts.Any(a => a == @"text/xml"))
+			using(var stream = new MemoryStream())
 			{
-				response.AppendHeader("Content-Type", "text/xml");
-			}
+				if (accepts.Any(a => a == @"text/xml"))
+				{
+					converter.ConvertToXml(views, stream);
+					response.AppendHeader("Content-Type", "text/xml");
+				}
+				else if (accepts.Any(a => a == @"application/xml"))
+				{
+					converter.ConvertToXml(views, stream);
+					response.AppendHeader("Content-Type", "application/xml");
+				}
+				else{
+					converter.ConvertToExcel(views, stream);
+					response.AppendHeader("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+				}
 
-			if (accepts.Any(a => a == @"text/xml"))
-			{
-				response.AppendHeader("Content-Type", "text/xml");
+
+				response.StatusCode = (int)HttpStatusCode.OK;
+
+				stream.Seek(0, SeekOrigin.Begin);
+				stream.WriteTo(response.OutputStream);
+				response.OutputStream.Flush();
+				response.OutputStream.Close();
 			}
 		}
 	}
