@@ -19,6 +19,7 @@ namespace Crawler.DataAccess.Repositories
         {
             string html = await DownloadHtmlAsync(url);
 
+			//TODO: add methods for converting links to local links and transforming url selments to file hierachy
             string path = GetFilePath(url);
 
             await SaveToFileAsync(path, html);

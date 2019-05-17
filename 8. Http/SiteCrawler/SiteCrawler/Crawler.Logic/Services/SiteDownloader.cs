@@ -32,7 +32,7 @@ namespace Crawler.Logic.Services
                 logger.Log($"This link {url} is not valid");
                 return;
             }
-
+			//TODO add check if file already exist
             await SaveContentAsync(url);
 
             logger.Log($"Link with url {url} was saved.");
@@ -72,6 +72,7 @@ namespace Crawler.Logic.Services
             if (url == null)
                 return false;
 
+			//TODO: add check to relative Url
 			if(!(Uri.TryCreate(url, UriKind.Absolute, out Uri uriResult)
 						&& (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps)))
 			{
