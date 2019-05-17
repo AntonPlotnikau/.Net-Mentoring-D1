@@ -10,6 +10,7 @@ using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace NorthwindListener.BLL.Services
 {
@@ -61,9 +62,15 @@ namespace NorthwindListener.BLL.Services
 
 			var requestModel = new GetOrdersRequest();
 
-			if (request.HttpMethod == "POST")
+			if (request.HttpMethod == "POST" && request.InputStream != null)
 			{
-				requestModel = parser.ParseRequestQueryString(request.Url.ParseQueryString());
+				using(var reader = new StreamReader(request.InputStream))
+				{
+					var data = reader.ReadToEnd();
+
+					var values = HttpUtility.ParseQueryString(data);
+					requestModel = parser.ParseRequestQueryString(values);
+				}
 			}
 			else
 			{

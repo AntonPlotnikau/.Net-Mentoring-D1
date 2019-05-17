@@ -40,7 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\Constraint.cs" />
+    <Compile Include="Models\IConstraint.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\ILogger.cs" />
     <Compile Include="Services\ISiteDownloader.cs" />

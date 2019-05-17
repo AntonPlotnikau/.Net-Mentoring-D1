@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using Crawler.DataAccess.Interface.Repositories;
 using Crawler.Interface.Services;
 using HtmlAgilityPack;
+using Crawler.Interface.Models;
 
 namespace Crawler.Logic.Services
 {
@@ -15,10 +16,13 @@ namespace Crawler.Logic.Services
 
         private ISiteContentSaver saver;
 
-        public SiteDownloader(ILogger logger, ISiteContentSaver saver)
+		public List<IConstraint> Constraints { get; private set; }
+
+		public SiteDownloader(ILogger logger, ISiteContentSaver saver)
         {
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
             this.saver = saver ?? throw new ArgumentNullException(nameof(saver));
+			this.Constraints = new List<IConstraint>();
         }
 
         public async Task DownloadSiteAsync(string url, int deepLevel)
@@ -68,8 +72,21 @@ namespace Crawler.Logic.Services
             if (url == null)
                 return false;
 
-            return Uri.TryCreate(url, UriKind.Absolute, out Uri uriResult)
-                        && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps);
+			if(!(Uri.TryCreate(url, UriKind.Absolute, out Uri uriResult)
+						&& (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps)))
+			{
+				return false;
+			}
+
+			foreach (var constraint in Constraints)
+			{
+				if (!constraint.IsAccepted(url))
+				{
+					return false;
+				}
+			}
+
+			return true;
         }
     }
 }

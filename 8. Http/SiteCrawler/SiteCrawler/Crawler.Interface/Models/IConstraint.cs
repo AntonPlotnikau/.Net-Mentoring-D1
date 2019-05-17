@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace Crawler.Interface.Models
 {
-    public enum Constraint
-    {
-    }
+	public interface IConstraint
+	{
+		bool IsAccepted(string url);
+	}
 }
