@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<logs>
+  <log created="2019-05-18T23:43:25.5556834+03:00">
+    <loglevel>Info</loglevel>
+    <message>GET: /Account/Login</message>
+  </log>
+  <log created="2019-05-18T23:43:32.8476825+03:00">
+    <loglevel>Debug</loglevel>
+    <message>SignIn</message>
+  </log>
+  <log created="2019-05-18T23:46:22.1905943+03:00">
+    <loglevel>Info</loglevel>
+    <message>GET: /Account/Login</message>
+  </log>
+  <log created="2019-05-18T23:46:27.018647+03:00">
+    <loglevel>Debug</loglevel>
+    <message>SignIn</message>
+  </log>
+</logs>
